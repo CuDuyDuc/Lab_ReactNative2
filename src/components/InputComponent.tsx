@@ -1,0 +1,61 @@
+import { InfoCircle } from 'iconsax-react-native';
+import React, { ReactNode, useState } from 'react';
+import { StyleSheet, TextInput, View } from 'react-native';
+import COLORS from '../assets/colors/Colors';
+
+interface Props{
+    value:string,
+    onChange:(val:string)=>void,
+    affix?:ReactNode,
+    placeholder?:string,
+    
+
+}
+const InputComponent = (props: Props) => {
+  const { value, onChange, affix, placeholder } = props;
+  const [isEmpty, setIsEmpty] = useState<boolean>(false); 
+
+  const handleFocus = () => {
+    setIsEmpty(value.trim() === ''); 
+};
+
+const handleChange = (val: string) => {
+    onChange(val);
+    setIsEmpty(val.trim() === '');
+};
+  return (
+    <View style={[styles.inputContainer,{borderColor:isEmpty?COLORS.RED:COLORS.HEX_LIGHT_GREY}]}>
+      {affix??affix}
+      <TextInput
+        style={styles.input}
+        value={value}
+        onChangeText={handleChange}
+        placeholder={placeholder??''}
+        onEndEditing={handleFocus}
+       />
+       {isEmpty?(<InfoCircle size="22" color={COLORS.HEX_RED}/>):undefined}
+    </View>
+    
+    
+  )
+}
+const styles = StyleSheet.create({
+    inputContainer: {
+        flexDirection: 'row',
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: COLORS.HEX_LIGHT_GREY,
+        width: '100%',
+        minHeight: 56,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 15,
+    },
+    input: {
+        padding: 0,
+        margin: 0,
+        flex: 1,
+        paddingHorizontal: 14
+    }
+})
+export default InputComponent
